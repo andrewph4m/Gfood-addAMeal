@@ -7,48 +7,99 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
     </head>
-<body class="bg-light">
+<body class="bg-white">
   <div class="container">
-    <form>
+    <form class="needs-validation" novalidate>
       <div class="formgroup">
         <label for="mealName">Meal name <span style="color:red"><strong>*</strong></span></span></label>
         <input name="input-mealName" class="form-control form-control-md" type="text" id="mealName" placeholder="Name of your meal" required>
+        <div class="invalid-feedback">
+          Please enter a meal name!
+        </div>
+        <div class="valid-feedback">
+          Looks good!
+        </div>
       </div>
+      
       <div class="formgroup">
+        
            <!--Make sure the form has the autocomplete function switched off:-->
         <table class="table table-borderless table-hover" id="dataTable">
           <thead>
             <th tyle="width: 10%" scope="col"><input type="checkbox" id="selectall" /></th>
-            <th style="width: 75%" scope="col">Ingredient</th>
-            <th style="width: 15%" scope="col">Quantity (in g/ml)</th>
+            <th style="width: 75%" scope="col"><strong>Ingredient</strong></th>
+            <th style="width: 15%" scope="col"><strong>Quantity (in g/ml)</strong></th>
           </thead>
           <tbody>
 
             <tr>
-              <td><input type="checkbox" class="check"></td>
+              <td><input type="checkbox" class="check">
+              </td>
               <td>
-                <select name="input-1[]"  style="height:100px" class="chosen_select_L" id="ingredient">
+                <select name="input-1[]"  style="height:200px" class="chosen_select_L" id="ingredient" required>
                   <option></option>
                 </select>
+                <div class="invalid-tooltip">
+                  Please select a valid ingredient.
+                </div>
               </td>
-              <td><input name="input-2[]" class="form-control" type="text" class="chosen_text"></td>
+              <td>
+                <input name="input-2[]" class="form-control form-control-sm" type="number" min="0.1" max="9999" step="0.01" class="chosen_text" required>
+                <div class="valid-feedback">
+                  Looks good!
+                </div>
+                <div class="invalid-feedback">
+                  Please provide a valid quantity.
+                </div>
+              </td>
               </td>
             </tr>
           </tbody>
         </table>
+        <small id="ingredientsHelpBlock" class="form-text text-muted">
+          To remove ingredient(s), select the checkbox that contains the ingredient and click on 'Remove ingredients'
+        </small>
       </div>
     </form>
 
- 
+
   <p>
     <div class="row row cols-4">
-      <div class="col"> <input class="btn btn-primary btn-md btn-block" type="button" value="Add Field" onClick="addRow('dataTable')" /></div>
-      <div class="col">  <input type="button"  class="btn btn-danger btn-md btn-block" value="Remove Field" onClick="deleteRow('dataTable')" /></div>
+      <div class="col"> <input class="btn btn-primary btn-md btn-block" type="button" value="Add ingredient" onClick="addRow('dataTable')" /></div>
+      <div class="col">  <input type="button"  class="btn btn-danger btn-md btn-block" value="Remove ingredients" onClick="deleteRow('dataTable')" /></div>
       <div class="col"></div>
-      <div class="col">    <input type="submit" class="btn btn-dark btn-md btn-block" value="Submit" onClick="parseAsJson()" /></div>
+      <div class="col">   <input type="submit" id="calculate" class="btn btn-dark btn-md btn-block" value="Calculate"  /></div>
     </div>
   </p>
   
+  <div id="calculation" class="row row cols-3">
+    <div class="col-md">
+      <h2>Average health star rating</h2> </br>
+      <h3 id="meal_hsr"> </h3> </br>
+      <h4 id="meal_stars"> </h4>
+    </div>
+    <div class="col-md">
+      <h2>Total energy</h2> </br>
+      <h3 id="meal_energy"> </h3> </br>
+      <h4>calories</h4>
+    </div>
+    <div class="col-md">
+      <h2>Total greenhouse gas emissions emitted</h2>
+      <h3 id="meal_ghg"> </h3> </br>
+      <h4>kilograms</h4>
+    </div>
+  </div>
+  <div id="calculation" class="row row cols-4">
+    <div class="col-md">
+    </div>
+    <div class="col-md">
+    </div>
+    <div class="col-md">
+    </div>
+    <div class="col-md">
+      <input type="submit" id="submitIngredient" class="btn btn-dark btn-md btn-block" value="Submit"  />
+    </div>
+  </div>
 
 
   <div id='searchResults' hidden></div>
@@ -76,6 +127,28 @@
     var JsonTagId = [];
     var ingredientInput = '{"name": "","ingredients":[]}'
     var mealInput;
+    document.getElementById('calculate').disabled = true;
+    (function() {
+      'use strict';
+      window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        document.getElementById('submitIngredient').disabled = true;
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          document.getElementById('calculate').addEventListener('click', function(event) {
+            if (form.checkValidity() === false) {         
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+            parseAsJson();
+          }, false);
+        });
+      }, false);
+    })();
+
+
     setTimeout(function(){
         json = JSON.parse(document.getElementById('testAPI').innerHTML);
         for(var i = 0; i < json.ingredients.length; i++) {
@@ -99,11 +172,13 @@
         }
         $(".chosen_select_L").chosen('destroy');
         $(".chosen_select_L").chosen();
+        document.getElementById('calculate').disabled = false;
     }, 3000);
 
-    console.log("fetch OK")
+    console.log("fetch OK");
+    console.log("fetch done");
 
-    console.log("fetch done")
+
 
 
     $('.chosen_select_L').on('change', function(evt, params) {
@@ -118,7 +193,7 @@
   function parseAsJson(){
     console.log(document.getElementById('mealName').value);
     mealInput = document.getElementById('mealName').value;
-    
+    ingredientInput = '{"name": "","ingredients":[]}'
     var obj = JSON.parse(ingredientInput);
     obj["name"] = mealInput;
     for (var i = 0; i < $('.chosen_select_L').length; i++){
@@ -128,11 +203,19 @@
       if (ingredientId != "" && typeof parseFloat(quantity) != "string"){
         obj["ingredients"].push({ingredientId, quantity});
       }
+    }
+    ingredientInput = JSON.stringify(obj);
+    console.log (ingredientInput == '{"name":"","ingredients":[]}');
+    if (ingredientInput == '{"name":"","ingredients":[]}'){
+      document.getElementById('submitIngredient').disabled = true;
+      console.log('true');
+    } else {
       
+      console.log(ingredientInput);
+      document.getElementById('submitIngredient').disabled = false;
     }
 
-    ingredientInput = JSON.stringify(obj)
-    console.log(ingredientInput);
+    
   }
 
   
