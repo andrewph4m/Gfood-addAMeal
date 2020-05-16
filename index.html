@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="chosen_v1.8.7/docsupport/style.css">
+        <link rel="stylesheet" href="chosen_v1.8.7/docsupport/prism.css">
+        <link rel="stylesheet" href="chosen_v1.8.7/chosen.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    </head>
+<body>
+  <div class="container-fluid">
+    <form>
+      <div class="formgroup">
+        <label for="mealName">Meal name <span style="color:red"><strong>*</strong></span></span></label>
+        <input name="input-mealName" class="form-control form-control-md" type="text" id="mealName" placeholder="Name of your meal" required>
+      </div>
+      <div class="formgroup">
+           <!--Make sure the form has the autocomplete function switched off:-->
+        <table class="table table-borderless table-hover" id="dataTable">
+          <thead>
+            <th tyle="width: 10%" scope="col"><input type="checkbox" id="selectall" /></th>
+            <th style="width: 75%" scope="col">Ingredient</th>
+            <th style="width: 15%" scope="col">Quantity (in g/ml)</th>
+          </thead>
+          <tbody>
+
+            <tr>
+              <td><input type="checkbox" class="check"></td>
+              <td>
+                <select name="input-1[]"  class="chosen_select_L" id="ingredient">
+                  <option></option>
+                </select>
+              </td>
+              <td><input name="input-2[]" class="form-control" type="text" class="chosen_text"></td>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+
+ 
+  <p>
+    <div class="row row cols-4">
+      <div class="col"> <input class="btn btn-primary btn-md btn-block" type="button" value="Add Field" onClick="addRow('dataTable')" /></div>
+      <div class="col">  <input type="button"  class="btn btn-danger btn-md btn-block" value="Remove Field" onClick="deleteRow('dataTable')" /></div>
+      <div class="col"></div>
+      <div class="col">    <input type="submit" class="btn btn-dark btn-md btn-block" value="Submit" onClick="parseAsJson()" /></div>
+    </div>
+  </p>
+  
+
+
+  <div id='searchResults' hidden></div>
+<p id="testAPI" hidden>List</p>
+  </div>
+
+
+
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- <script src="chosen_v1.8.7/docsupport/jquery-3.2.1.min.js" type="text/javascript"></script> -->
+<script src="chosen_v1.8.7/chosen.jquery.js" type="text/javascript"></script><!----->
+<script src="chosen_v1.8.7/docsupport/prism.js" type="text/javascript" charset="utf-8"></script><!----->
+<script src="chosen_v1.8.7/docsupport/init.js" type="text/javascript" charset="utf-8"></script> <!----->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+<script src="script.js"></script>
+<script src="script2.js"></script>
+
+<script>
+    var json;
+    var JsonTagName = [];
+    var JsonTagId = [];
+    var ingredientInput = '{"name": "","ingredients":[]}'
+    var mealInput;
+    setTimeout(function(){
+        json = JSON.parse(document.getElementById('testAPI').innerHTML);
+        for(var i = 0; i < json.ingredients.length; i++) {
+        var obj = json.ingredients[i];
+
+        //console.log(obj.name);
+        var tag = document.createElement("p");
+        var text = document.createTextNode(obj.name + ', ' + obj.ingredient_type);
+        var ingredientId = document.createTextNode(obj._id);
+        tag.appendChild(text);
+        var element = document.getElementById("searchResults");
+        element.appendChild(tag);
+        JsonTagName.push(text.data);
+        JsonTagId.push(ingredientId.data)
+        };
+        for (var i = 0; i < JsonTagName.length; i++){
+          var o = new Option(JsonTagName[i], JsonTagId[i]);
+          $(o).html(JsonTagName[i]);
+          $(".chosen_select_L").append(o);
+          console.log("fetch")
+        }
+        $(".chosen_select_L").chosen('destroy');
+        $(".chosen_select_L").chosen();
+    }, 3000);
+
+    console.log("fetch OK")
+
+    console.log("fetch done")
+
+
+    $('.chosen_select_L').on('change', function(evt, params) {
+      // The value
+      console.log($(this).val());
+
+    });
+
+
+  
+
+  function parseAsJson(){
+    console.log(document.getElementById('mealName').value);
+    mealInput = document.getElementById('mealName').value;
+    
+    var obj = JSON.parse(ingredientInput);
+    obj["name"] = mealInput;
+    for (var i = 0; i < $('.chosen_select_L').length; i++){
+      var ingredientId = $('.chosen_select_L')[i].value
+      var quantity = document.getElementsByName('input-2[]')[i].value
+      // ingredientInput.append(ingredientId, quantity)
+      if (ingredientId != "" && typeof parseFloat(quantity) != "string"){
+        obj["ingredients"].push({ingredientId, quantity});
+      }
+      
+    }
+
+    ingredientInput = JSON.stringify(obj)
+    console.log(ingredientInput);
+  }
+
+  
+
+</script>
+
+
+
+</html>
