@@ -130,7 +130,14 @@
         <textarea name="input-mealName" class="form-control form-control-md" type="textarea" id="mealDescription" placeholder="Description here" rows = "3"></textarea>
       </div >
       
-      <h2> Ingredients </h2>
+      <div class = "row row cols-4">
+        <div class="col"><h2> Ingredients </h2></div>
+        <div class="col"></div>
+        <div class="col"></div>
+        <div class="col"><a href="https://www.gfood.gq/add-ingredient/" target="_blank" class = "btn btn-md btn-success" data-toggle="tooltip" data-placement="top" title="Open in a new window">Add an ingredient</a></div>
+        
+      </div>
+      
       <div class="formgroup p-5">
         
            <!--Make sure the form has the autocomplete function switched off:-->
@@ -187,7 +194,7 @@
 
 </br>
   <div class="row"></div>
-  <h2 class ="mealInfo" hidden>Your meal information</h2>
+  <h2 id ="mealInfo" hidden>Your meal information</h2>
   <div id="calculation" class="row row cols-3 p-5">
     <div class="col-md">
       <h4 id="hsrLabel1" hidden>Average health star rating</h4>
@@ -268,6 +275,7 @@
         }, 4000)
         document.getElementById('deleteRow').disabled = true;
         document.getElementById('submitIngredient').disabled = true;
+        document.getElementById('submitIngredient').hidden = true;
         // Loop over them and prevent submission
         var validation = Array.prototype.filter.call(forms, function(form) {
           document.getElementById('calculate').addEventListener('click', function(event) {
@@ -380,6 +388,7 @@
   }
 
   function calculate(){
+    document.getElementById('submitIngredient').hidden = false;
     document.getElementById('mealInfo').hidden = true;
     document.getElementById('hsrLabel').hidden = true;
     document.getElementById('energyLabel').hidden = true;
