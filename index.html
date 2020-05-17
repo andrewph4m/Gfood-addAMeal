@@ -113,8 +113,9 @@
   </div>
   <div class="container">
     <form class="needs-validation" novalidate>
-      <div class="formgroup">
-        <label for="mealName">Meal name <span style="color:red"><strong>*</strong></span></span></label>
+      <h2 class="p-2"> Meal information </h2>
+      <div class="formgroup p-5" >
+        <label for="mealName"><strong>Meal name </strong> <span style="color:red"><strong>*</strong></span></span></label>
         <input name="input-mealName" class="form-control form-control-md" type="text" id="mealName" placeholder="Name of your meal" required>
         <div class="invalid-feedback">
           Please enter a meal name!
@@ -124,12 +125,13 @@
         </div>
       </div>
 
-      <div class="formgroup">
-        <label for="mealDescription">Meal description </span></span></label>
+      <div class="formgroup p-5">
+        <label for="mealDescription"> <strong>Meal description</strong> </span></span></label>
         <textarea name="input-mealName" class="form-control form-control-md" type="textarea" id="mealDescription" placeholder="Description here" rows = "3"></textarea>
-      </div>
+      </div >
       
-      <div class="formgroup">
+      <h2> Ingredients </h2>
+      <div class="formgroup p-5">
         
            <!--Make sure the form has the autocomplete function switched off:-->
         <table class="table table-borderless table-hover" id="dataTable">
@@ -173,8 +175,8 @@
 
   <p>
     <div class="row row cols-4">
-      <div class="col"> <input class="btn btn-primary btn-md btn-block" type="button" value="Add ingredient" onClick="addRow('dataTable')" /></div>
-      <div class="col">  <input type="button"  class="btn btn-danger btn-md btn-block" value="Remove ingredients" onClick="deleteRow('dataTable')" /></div>
+      <div class="col"> <input id="addRow" class="btn btn-primary btn-md btn-block" type="button" value="Add ingredient" onClick="addRow('dataTable')" /></div>
+      <div class="col">  <input id="deleteRow" type="button"  class="btn btn-danger btn-md btn-block" value="Remove ingredients" onClick="deleteRow('dataTable')" /></div>
       <div class="col"></div>
       <div class="col">   <input type="submit" id="calculate" class="btn btn-dark btn-md btn-block" value="Calculate" /></div>
     </div>
@@ -182,14 +184,15 @@
 
 </br>
   <div class="row"></div>
-  <div id="calculation" class="row row cols-3">
+  <h2 class ="mealInfo" hidden>Your meal information</h2>
+  <div id="calculation" class="row row cols-3 p-5">
     <div class="col-md">
-      <h4 id="hsrLabel1" hidden>Average health star rating</h4> </br>
+      <h4 id="hsrLabel1" hidden>Average health star rating</h4>
       <h2 id="meal_hsr"> </h2> 
       <h4 id="hsrLabel" hidden>stars</h4>
     </div>
     <div class="col-md">
-      <h4 id="energyLabel1" hidden>Total energy</h4> </br>
+      <h4 id="energyLabel1" hidden>Total energy</h4> 
       <h2 id="meal_energy"> </h2> 
       <h4 id="energyLabel" hidden>calories</h4>
     </div>
@@ -260,6 +263,7 @@
             $("div.overlay").removeClass("show");
         
         }, 4000)
+        document.getElementById('deleteRow').disabled = true;
         document.getElementById('submitIngredient').disabled = true;
         // Loop over them and prevent submission
         var validation = Array.prototype.filter.call(forms, function(form) {
@@ -382,6 +386,8 @@
             $("div.overlay").removeClass("show");
         
         }, 4000)
+        
+    document.getElementById('mealInfo').hidden = true;
     document.getElementById('hsrLabel').hidden = true;
     document.getElementById('energyLabel').hidden = true;
     document.getElementById('ghgLabel').hidden = true;
@@ -547,6 +553,7 @@
       var avg = parseFloat(hsrSum/HSROutput.length);
       console.log(hsrSum);
       console.log(avg);
+      document.getElementById('mealInfo').hidden = false;
       document.getElementById('hsrLabel1').hidden = false;
       document.getElementById('energyLabel1').hidden = false;
       document.getElementById('ghgLabel1').hidden = false;
@@ -589,6 +596,8 @@
       .then(response => response.text())
       .then(result => console.log(result))
       .catch(error => console.log('error', error));
+
+      window.top.location.href = "http://www.gfood.gq/"; 
   }
 
   function ghgEmissions(catId){

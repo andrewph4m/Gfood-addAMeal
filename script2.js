@@ -35,7 +35,7 @@ $(".chosen_select_L").chosen({
         newcell.innerHTML = table.rows[1].cells[i].innerHTML;
       }
     } else {
-      alert("Maximum fields is 10.");
+      document.getElementById('addRow').disabled = true;
   
     }
     $(".chosen_select_L").chosen();
@@ -47,6 +47,7 @@ $(".chosen_select_L").chosen({
     var validation = Array.prototype.filter.call(forms, function(form) {
         form.classList.remove('was-validated');
     });
+    document.getElementById('deleteRow').disabled = false;
 
 
   }
@@ -65,6 +66,11 @@ $(".chosen_select_L").chosen({
         table.deleteRow(i);
         rowCount--;
         i--;
+        
       }
+      if(table.rows.length == 2){
+        document.getElementById('deleteRow').disabled = true;
+      }
+      document.getElementById('addRow').disabled = false;
     }
   }
