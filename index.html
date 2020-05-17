@@ -585,7 +585,13 @@
     myHeaders.append('Accept', 'application/json');
     myHeaders.append('GET', 'POST');
 
-    var raw = ingredientInput;
+    ingredientInput = JSON.parse(ingredientInput);
+    ingredientInput["hsr"] = parseFloat(document.getElementById('meal_hsr').innerHTML)
+    ingredientInput["energy"] = parseFloat(document.getElementById('meal_energy').innerHTML)
+    ingredientInput["ghg"] = parseFloat(document.getElementById('meal_ghg').innerHTML)
+
+    var raw = JSON.stringify(ingredientInput);
+    console.log(ingredientInput);
 
     var requestOptions = {
       method: 'POST',
