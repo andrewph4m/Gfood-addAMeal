@@ -1,3 +1,7 @@
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
 $(".chosen_select_L").chosen({
     disable_search_threshold: 10,
     no_results_text: "Oops, nothing found!"
