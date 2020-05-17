@@ -380,16 +380,6 @@
   }
 
   function calculate(){
-    $("div.spanner").addClass("show");
-        $("div.overlay").addClass("show");
-        
-        
-        setTimeout(function(){
-            $("div.spanner").removeClass("show");
-            $("div.overlay").removeClass("show");
-        
-        }, 4000)
-        
     document.getElementById('mealInfo').hidden = true;
     document.getElementById('hsrLabel').hidden = true;
     document.getElementById('energyLabel').hidden = true;
@@ -410,7 +400,15 @@
     var jsonIn = JSON.parse(ingredientInput);
     var jsonLength = jsonIn.ingredients.length;
     console.log(jsonLength);
-    
+    $("div.spanner").addClass("show");
+        $("div.overlay").addClass("show");
+        
+        
+        setTimeout(function(){
+            $("div.spanner").removeClass("show");
+            $("div.overlay").removeClass("show");
+        
+        }, 4000)
     
     for(var i = -1; i < jsonLength - 1; i++){
       var ingreId = jsonIn.ingredients[i+1].ingredientId;
