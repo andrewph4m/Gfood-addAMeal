@@ -40,6 +40,14 @@ $(".chosen_select_L").chosen({
     }
     $(".chosen_select_L").chosen();
     $(".chosen_select_M").chosen();
+    document.getElementById('submitIngredient').disabled = true;
+    var forms = document.getElementsByClassName('needs-validation');
+    document.getElementById('submitIngredient').disabled = true;
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+        form.classList.remove('was-validated');
+    });
+
 
   }
   

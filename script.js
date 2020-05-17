@@ -3,7 +3,7 @@ var requestOptions = {
   redirect: 'follow'
 };
 
-var n = 5;
+var n = 10;
 
 // fetch("https://gfood-api.azurewebsites.net/ingredients", requestOptions)
 //   .then(response => response.text())
