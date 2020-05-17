@@ -76,7 +76,9 @@
     <div class="col-md">
       <h2>Average health star rating</h2> </br>
       <h3 id="meal_hsr"> </h3> </br>
-      <h4 id="meal_stars"> </h4>
+      <h4 id="meal_stars">
+        stars
+      </h4>
     </div>
     <div class="col-md">
       <h2>Total energy</h2> </br>
@@ -130,6 +132,9 @@
     var mealInput;
     var jsonInput = [];
     var HSROutput = [];
+    var ingreMeasure = [];
+    var energyOutput = [];
+    var ghgOutput = [];
     document.getElementById('calculate').disabled = true;
     (function() {
       'use strict';
@@ -257,8 +262,12 @@
     
     for(var i = -1; i < jsonLength - 1; i++){
       var ingreId = jsonIn.ingredients[i+1].ingredientId;
+
+      ingreMeasure.push(parseFloat(jsonIn.ingredients[i + 1].quantity));
+
       console.log(ingreId);
       var cat_ID;
+      var class_ID;
       var protein;
       var energy;
       var tsfa;
@@ -302,10 +311,25 @@
           inputProccess = JSON.parse(inputProccess);
           console.log('INPUT PROCESS:'+inputProccess);
 
+          if(!inputProccess.hsr_id){
+            cat_ID = "2";
+          } else {
+            cat_ID = parseFloat(inputProccess.hsr_id);
+          }
+          if(!inputProccess.emission_id){
+            class_ID = Math.floor(Math.random() * 44) + 1;  ;
+          } else {
+            class_ID = parseFloat(inputProccess.emission_id);
+          }
+          ghgOutput.push(parseFloat(ghgEmissions(parseInt(class_ID))));
 
-          cat_ID = "2";
           protein = parseFloat(inputProccess.protein);
+
+
           energy = parseFloat(inputProccess.energy);
+          energyOutput.push(energy);
+          
+
           tsfa = parseFloat(inputProccess.saturated_fat);
           sugars = parseFloat(inputProccess.sugar);
           sodium = parseFloat(inputProccess.sodium);
@@ -342,11 +366,11 @@
               .then(() => HSROutput.push(parseFloat(localHSR.substring(7, 10))))
               .catch(error => console.log('error', error));
 
-              fetch("https://gfood-hsr-api.azurewebsites.net", requestOptions)
-              .then(response => response.text())
-              .then(data =>  localHSR = data)
-              .then(() => document.getElementById("meal_stars").innerHTML = getStars(parseFloat(localHSR.substring(7,10))))
-              .catch(error => console.log('error', error));
+              // fetch("https://gfood-hsr-api.azurewebsites.net", requestOptions)
+              // .then(response => response.text())
+              // .then(data =>  localHSR = data)
+              // .then(() => )
+              // .catch(error => console.log('error', error));
               console.log("fetch ok");
               //console.log(typeof whyTheHell);
 
@@ -360,22 +384,78 @@
           //    return await fetch_retry(n - 1);
           //  }
           // };
-      }, 3000)
+      }, 2000)
     
 
     }
     setTimeout(function(){
       var hsrSum = 0;
-      console.log(hsrSum);
+      var energySum = 0;
+      var ghgSum = 0;
+      // console.log(hsrSum);
       for( var i = 0; i < HSROutput.length; i++ ){
         hsrSum += (HSROutput[i]); //don't forget to add the base
+        energySum += parseFloat(energyOutput[i]/ 100 * ingreMeasure[i]);
+        ghgSum += parseFloat(ghgOutput[i]/ 100 * ingreMeasure[i]);
       }
       var avg = parseFloat(hsrSum/HSROutput.length);
       console.log(hsrSum);
       console.log(avg);
       document.getElementById('meal_hsr').innerHTML = avg;
-    },5500)
+      document.getElementById('meal_energy').innerHTML = energySum;
+      document.getElementById('meal_ghg').innerHTML = ghgSum;
 
+    },3500)
+
+  }
+
+  function ghgEmissions(catId){
+    switch(catId){
+      case 1 : return 1.58 ; break;
+      case 2 : return 1.68 ; break;
+      case 3 : return 1.18 ; break;
+      case 4 : return 2.47 ; break;
+      case 5 : return 3.81 ; break;
+      case 6 : return 0.45 ; break;
+      case 7 : return 1.3 ; break;
+      case 8 : return 3.16 ; break;
+      case 9 : return 1.8 ; break;
+      case 10 : return 1.79 ; break;
+      case 11 : return 0.97 ; break;
+      case 12 : return 0.37 ; break;
+      case 13 : return 3.18 ; break;
+      case 14 : return 0.97 ; break;
+      case 15 : return 3.14 ; break;
+      case 16 : return 6.15 ; break;
+      case 17 : return 7.16 ; break;
+      case 18 : return 3.59 ; break;
+      case 19 : return 3.76 ; break;
+      case 20 : return 5.25 ; break;
+      case 21 : return 2.01 ; break;
+      case 22 : return 0.5 ; break;
+      case 23 : return 0.43 ; break;
+      case 24 : return 0.51 ; break;
+      case 25 : return 0.53 ; break;
+      case 26 : return 0.37 ; break;
+      case 27 : return 0.86 ; break;
+      case 28 : return 0.42 ; break;
+      case 29 : return 1.52 ; break;
+      case 30 : return 1.76 ; break;
+      case 31 : return 1.06 ; break;
+      case 32 : return 27.65 ; break;
+      case 33 : return 46.28 ; break;
+      case 34 : return 85.19 ; break;
+      case 35 : return 28.79 ; break;
+      case 36 : return 32.71 ; break;
+      case 37 : return 11.54 ; break;
+      case 38 : return 9.82 ; break;
+      case 39 : return 2.84 ; break;
+      case 40 : return 21.44 ; break;
+      case 41 : return 4.6 ; break;
+      case 42 : return 12.51 ; break;
+      case 43 : return 23.99 ; break;
+      default  : return 1;  
+    }
   }
 
   
