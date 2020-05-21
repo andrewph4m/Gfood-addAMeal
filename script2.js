@@ -1,3 +1,5 @@
+var ingreCount = 1;
+
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
@@ -28,7 +30,7 @@ $(".chosen_select_L").chosen({
   function addRow(dataTable) {
     var table = document.getElementById(dataTable);
     var rowCount = table.rows.length;
-    if (rowCount < 11) {
+    if (rowCount < 16) {
       $(".chosen_select_L").chosen('destroy');
       $(".chosen_select_M").chosen('destroy');
       var row = table.insertRow(rowCount);
@@ -39,8 +41,8 @@ $(".chosen_select_L").chosen({
         newcell.innerHTML = table.rows[1].cells[i].innerHTML;
       }
     } else {
+      ingreCount -= 1;
       document.getElementById('addRow').disabled = true;
-  
     }
     $(".chosen_select_L").chosen();
     $(".chosen_select_M").chosen();
@@ -51,8 +53,9 @@ $(".chosen_select_L").chosen({
     var validation = Array.prototype.filter.call(forms, function(form) {
         form.classList.remove('was-validated');
     });
+    ingreCount += 1;
     document.getElementById('deleteRow').disabled = false;
-
+    document.getElementById('ingreCounter').innerHTML = ingreCount;
 
   }
   
@@ -70,7 +73,8 @@ $(".chosen_select_L").chosen({
         table.deleteRow(i);
         rowCount--;
         i--;
-        
+        ingreCount -= 1;
+        document.getElementById('ingreCounter').innerHTML = ingreCount;
       }
       if(table.rows.length == 2){
         document.getElementById('deleteRow').disabled = true;

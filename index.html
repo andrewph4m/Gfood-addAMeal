@@ -41,13 +41,15 @@
   animation-fill-mode: both;
   -webkit-animation: load7 1.8s infinite ease-in-out;
   animation: load7 1.8s infinite ease-in-out;
+  
 }
 .loader {
   color: #ffffff;
   font-size: 10px;
-  margin: 80px auto;
+  margin: 25% auto;
   position: relative;
   text-indent: -9999em;
+
   -webkit-transform: translateZ(0);
   -ms-transform: translateZ(0);
   transform: translateZ(0);
@@ -101,21 +103,24 @@
 }
 
 .spanner.show, .overlay.show {
-	opacity: 1
+	opacity: 1;
+  width: 100%;
+  height: 100%;
+  align-content: center;
 }
       </style>
+      <script src="https://kit.fontawesome.com/4bc50e910c.js" crossorigin="anonymous"></script>
     </head>
 <body class="bg-white">
     <div class="overlay"></div>
   <div class="spanner">
     <div class="loader"></div>
-    <p>Please wait...</p>
   </div>
   <div class="container">
     <form class="needs-validation" novalidate>
       <h2 class="p-2"> Meal information </h2>
       <div class="formgroup p-5" >
-        <label for="mealName"><strong>Meal name </strong> <span style="color:red"><strong>*</strong></span></span></label>
+        <label for="mealName"><strong>Meal name </strong> <span style="color:red"><strong>*</strong></span></span> <i class="fas fa-info-circle" id="nameHelp" data-toggle="tooltip" data-placement="right" title="Your desired meal name"></i></label>
         <input name="input-mealName" class="form-control form-control-md" type="text" id="mealName" placeholder="Name of your meal" required>
         <div class="invalid-feedback">
           Please enter a meal name!
@@ -126,26 +131,30 @@
       </div>
 
       <div class="formgroup p-5">
-        <label for="mealDescription"> <strong>Meal description</strong> </span></span></label>
-        <textarea name="input-mealName" class="form-control form-control-md" type="textarea" id="mealDescription" placeholder="Description here" rows = "3"></textarea>
+        <label for="mealDescription"> <strong>Meal description <i class="fas fa-info-circle" id="descHelp" data-toggle="tooltip" data-placement="right" title="Your meal description (optional)"></i></strong> </span></span></label>
+        <textarea name="input-mealDesc" class="form-control form-control-md" type="textarea" id="mealDescription" placeholder="Description here" rows = "3"></textarea>
       </div >
       
       <div class = "row row cols-4">
-        <div class="col"><h2> Ingredients </h2></div>
+        <div class="col"><h2> Ingredients </h2><span>(Max 15)</div>
         <div class="col"></div>
-        <div class="col"></div>
+        <div class="col">
+          <small id="ingredientsHelpBlock" class="form-text text-muted">
+            Ingredient not found? Add a new ingredient using this button (opens in a new window)
+          </small>
+        </div>
         <div class="col"><a href="https://www.gfood.gq/add-ingredient/" target="_blank" class = "btn btn-md btn-success" data-toggle="tooltip" data-placement="top" title="Open in a new window">New ingredient</a></div>
         
       </div>
       
       <div class="formgroup p-5">
-        
+        <h5>Count: <span id="ingreCounter">1</span>/15</h5>
            <!--Make sure the form has the autocomplete function switched off:-->
         <table class="table table-borderless table-hover" id="dataTable">
           <thead>
-            <th tyle="width: 10%" scope="col"><input type="checkbox" id="selectall" /></th>
-            <th style="width: 75%" scope="col"><strong>Ingredient</strong></th>
-            <th style="width: 15%" scope="col"><strong>Quantity (g/ml)</strong></th>
+            <th tyle="width: 15%" scope="col"><input type="checkbox" id="selectall" /> <i class="fas fa-info-circle" id="deleteHelp" data-toggle="tooltip" data-placement="top" title="Select all ingredients"></i></th>
+            <th style="width: 65%" scope="col"><strong>Ingredient <i class="fas fa-info-circle" id="ingreHelp" data-toggle="tooltip" data-placement="top" title="The ingredients in your specified meal"></i></strong></th>
+            <th style="width: 20%" scope="col"><strong>Quantity (g/ml) <i class="fas fa-info-circle" id="quantityHelp" data-toggle="tooltip" data-placement="top" title="Approximate quantity of each ingredient (in either grams or mililitres"></i></strong></th>
           </thead>
           <tbody>
 
@@ -153,7 +162,7 @@
               <td><input type="checkbox" class="check">
               </td>
               <td>
-                <select name="input-1[]"  style="height:200px" class="chosen_select_L" id="ingredient" required>
+                <select name="input-1[]" class="chosen_select_L" id="ingredient" required>
                   <option></option>
                 </select>
                 <div class="invalid-tooltip">
@@ -166,7 +175,7 @@
                   Looks good!
                 </div>
                 <div class="invalid-feedback">
-                  Please provide a valid quantity.
+                  Please provide a valid quantity (from 0 to 9999)
                 </div>
               </td>
               </td>
@@ -199,17 +208,17 @@
     <div class="col-md">
       <h4 id="hsrLabel1" hidden>Average health star rating</h4>
       <h2 id="meal_hsr"> </h2> 
-      <h4 id="hsrLabel" hidden>stars</h4>
+      <div id="hsrLabel" hidden><span id="stars"></span></div>
     </div>
     <div class="col-md">
-      <h4 id="energyLabel1" hidden>Total energy</h4> 
+      <h4 id="energyLabel1" hidden>Energy</h4> 
       <h2 id="meal_energy"> </h2> 
       <h4 id="energyLabel" hidden>calories</h4>
     </div>
     <div class="col-md">
-      <h4 id="ghgLabel1" hidden>Total greenhouse gas emissions emitted</h4>
+      <h5 id="ghgLabel1" hidden>Greenhouse gas emitted</h5>
       <h2 id="meal_ghg"> </h2> 
-      <h4 id="ghgLabel" hidden>kilograms</h4>
+      <h4 id="ghgLabel" hidden>kilograms of Carbondioxide</h4>
     </div>
   </div>
 
@@ -344,10 +353,11 @@
       var ingredientId = $('.chosen_select_L')[i].value
       var quantity = document.getElementsByName('input-2[]')[i].value
       // ingredientInput.append(ingredientId, quantity)
-      if (ingredientId != "" && typeof parseFloat(quantity) != "string" && parseFloat(quantity) <= 9999){
+      if (ingredientId != "" && typeof parseFloat(quantity) != "string" && parseFloat(quantity) <= 9999 && parseFloat(quantity) > 0){
         obj["ingredients"].push({ingredientId, quantity});
       } else {
         obj["name"] = "";
+        obj["description"] = "";
         obj["ingredients"] = [];
       }
     }
@@ -413,7 +423,9 @@
     
     for(var i = -1; i < jsonLength - 1; i++){
       var ingreId = jsonIn.ingredients[i+1].ingredientId;
+      console.log("this is the id: " + ingreId);
 
+      
       ingreMeasure.push(parseFloat(jsonIn.ingredients[i + 1].quantity));
 
       console.log(ingreId);
@@ -539,7 +551,7 @@
           //  }
           // };
       }, 2000)
-    
+      
 
     }
     setTimeout(function(){
@@ -552,7 +564,7 @@
         energySum += parseFloat(energyOutput[i]/ 100 * ingreMeasure[i]);
         ghgSum += parseFloat(ghgOutput[i]/ 100 * ingreMeasure[i]);
       }
-      var avg = parseFloat(hsrSum/HSROutput.length);
+      var avg = Math.round(parseFloat(hsrSum/HSROutput.length),2);
       console.log(hsrSum);
       console.log(avg);
       document.getElementById('mealInfo').hidden = false;
@@ -563,10 +575,12 @@
       document.getElementById('energyLabel').hidden = false;
       document.getElementById('ghgLabel').hidden = false;
       document.getElementById('meal_hsr').innerHTML = avg;
+      document.getElementById('stars').innerHTML = getStars(avg);
       document.getElementById('meal_energy').innerHTML = Math.round(energySum,2);
       document.getElementById('meal_ghg').innerHTML = Math.round(ghgSum,2);
+      window.scrollTo(0,document.body.scrollHeight);
     },3500)
-
+    
   }
 
   function SubmitMeal(){
