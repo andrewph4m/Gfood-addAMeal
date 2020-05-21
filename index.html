@@ -119,7 +119,56 @@
   <div class="container">
     <form class="needs-validation" novalidate>
       <h2 class="p-2"> Meal information </h2>
-      <a href="#" class="badge badge-info" onclick="ScrollToBottom()" >Need help?</a>
+      <a href="#" class="badge badge-info" data-toggle="modal" data-target="#exampleModalCenter">Need help?</a>
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalCenterTitle">Add a meal - help</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <h4>Instructions</h4>
+                <div class="row">
+                  <div class="col text-center">
+                    <img src="img/Step1.jpg" alt="step1" class="img-thumbnail img-responsive">
+                  </div>
+                  <div class="col text-center">
+                    <img src="img/Step2.jpg" alt="step2" class="img-thumbnail img-responsive">
+                  </div>
+                  <div class="col text-center">
+                    <img src="img/Step3.jpg" alt="step3" class="img-thumbnail img-responsive">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <h5>Fill in meal information</h5>
+                    <p>The basics. Fill in your meal name, and a description (if you like)</p>
+                  </div>
+                  <div class="col">
+                    <h5>Fill in ingredients</h5>
+                    <p>Choose ingredients from a list of our ever-growing database, and the quantity in each. You can put in an approximate value. Can’t find one? Create your own</p>
+                  </div>
+                  <div class="col">
+                    <h5>Your meal, in statistics</h5>
+                    <p>When you’re happy with ingredients, we’ll show you information on the overall health star rating, total calories consumed, and the greenhouse gas emissions generated from the ingredients.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="formgroup p-5" >
         <label for="mealName"><strong>Meal name </strong> <span style="color:red"><strong>*</strong></span></span> <i class="fas fa-info-circle" id="nameHelp" data-toggle="tooltip" data-placement="right" title="Your desired meal name"></i></label>
         <input name="input-mealName" class="form-control form-control-md" type="text" id="mealName" placeholder="Name of your meal" required>
@@ -238,34 +287,7 @@
     </div>
   </div>
 
-  <div class="container">
-    <h4>Instructions</h4>
-    <div class="row">
-      <div class="col text-center">
-        <img src="img/Step1.jpg" alt="step1" class="img-thumbnail img-responsive">
-      </div>
-      <div class="col text-center">
-        <img src="img/Step2.jpg" alt="step2" class="img-thumbnail img-responsive">
-      </div>
-      <div class="col text-center">
-        <img src="img/Step3.jpg" alt="step3" class="img-thumbnail img-responsive">
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <h5>Fill in meal information</h5>
-        <p>The basics. Fill in your meal name, and a description (if you like)</p>
-      </div>
-      <div class="col">
-        <h5>Fill in ingredients</h5>
-        <p>Choose ingredients from a list of our ever-growing database, and the quantity in each. You can put in an approximate value. Can’t find one? Create your own</p>
-      </div>
-      <div class="col">
-        <h5>Your meal, in statistics</h5>
-        <p>When you’re happy with ingredients, we’ll show you information on the overall health star rating, total calories consumed, and the greenhouse gas emissions generated from the ingredients.</p>
-      </div>
-    </div>
-  </div>
+  
 
 
   <div id='searchResults' hidden></div>
