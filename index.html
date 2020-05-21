@@ -119,6 +119,7 @@
   <div class="container">
     <form class="needs-validation" novalidate>
       <h2 class="p-2"> Meal information </h2>
+      <a href="#" class="badge badge-info" onclick="ScrollToBottom()" >Need help?</a>
       <div class="formgroup p-5" >
         <label for="mealName"><strong>Meal name </strong> <span style="color:red"><strong>*</strong></span></span> <i class="fas fa-info-circle" id="nameHelp" data-toggle="tooltip" data-placement="right" title="Your desired meal name"></i></label>
         <input name="input-mealName" class="form-control form-control-md" type="text" id="mealName" placeholder="Name of your meal" required>
@@ -237,6 +238,35 @@
     </div>
   </div>
 
+  <div class="container">
+    <h4>Instructions</h4>
+    <div class="row">
+      <div class="col text-center">
+        <img src="img/Step1.jpg" alt="step1" class="img-thumbnail img-responsive">
+      </div>
+      <div class="col text-center">
+        <img src="img/Step2.jpg" alt="step2" class="img-thumbnail img-responsive">
+      </div>
+      <div class="col text-center">
+        <img src="img/Step3.jpg" alt="step3" class="img-thumbnail img-responsive">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <h5>Fill in meal information</h5>
+        <p>The basics. Fill in your meal name, and a description (if you like)</p>
+      </div>
+      <div class="col">
+        <h5>Fill in ingredients</h5>
+        <p>Choose ingredients from a list of our ever-growing database, and the quantity in each. You can put in an approximate value. Can’t find one? Create your own</p>
+      </div>
+      <div class="col">
+        <h5>Your meal, in statistics</h5>
+        <p>When you’re happy with ingredients, we’ll show you information on the overall health star rating, total calories consumed, and the greenhouse gas emissions generated from the ingredients.</p>
+      </div>
+    </div>
+  </div>
+
 
   <div id='searchResults' hidden></div>
 <p id="testAPI" hidden>List</p>
@@ -258,6 +288,12 @@
 <script src="script2.js"></script>
 
 <script>
+    function ScrollToBottom(){
+      $("html, body").animate({ 
+                    scrollTop: $( 
+                      'html, body').get(0).scrollHeight 
+                }, 2000); 
+    }
     var json;
     var JsonTagName = [];
     var JsonTagId = [];
@@ -591,7 +627,12 @@
       document.getElementById('stars').innerHTML = getStars(avg);
       document.getElementById('meal_energy').innerHTML = Math.round(energySum,2);
       document.getElementById('meal_ghg').innerHTML = Math.round(ghgSum,2);
-      window.scrollTo(0,document.body.scrollHeight);
+      
+      
+      $("html, body").animate({ 
+                    scrollTop: $( 
+                      'html, body').get(0).scrollHeight 
+                }, 2000); 
     },3500)
     
   }
