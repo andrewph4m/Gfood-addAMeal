@@ -129,29 +129,27 @@
           Looks good!
         </div>
       </div>
-
-      <div class="formgroup p-5">
-        <label for="mealDescription"> <strong>Meal description <i class="fas fa-info-circle" id="descHelp" data-toggle="tooltip" data-placement="right" title="Your meal description (optional)"></i></strong> </span></span></label>
-        <textarea name="input-mealDesc" class="form-control form-control-md" type="textarea" id="mealDescription" placeholder="Description here" rows = "3"></textarea>
-      </div >
       
-      <div class = "row row cols-4">
-        <div class="col"><h2> Ingredients </h2> <span>(Max 15)</div> 
-        <div class="col"></div>
+      <div class="formgroup p-5">
+        <label for="mealDescription"> <strong>Meal description <i class="fas fa-info-circle" id="descHelp" data-toggle="tooltip" data-placement="right" title="" aria-hidden="true" data-original-title="Your meal description (optional)"></i><span class="sr-only">Your meal description (optional)</span></strong> </label>
+        <textarea name="input-mealDesc" class="form-control form-control-md" type="textarea" id="mealDescription" placeholder="Description here" rows="3"></textarea>
+      </div>
 
-        <!-- <div class="col"> <input id="addRow" class="btn btn-primary btn-md btn-block" type="button" value="Add ingredient" onClick="addRow('dataTable')" /></div>
-      <div class="col">  <input id="deleteRow" type="button"  class="btn btn-danger btn-md btn-block" value="Remove ingredients" onClick="deleteRow('dataTable')" /></div> -->
+
+      <div class = "row row cols-4">
+        <div class="col"><h2> Ingredients </h2><span>(Max 15)</div>
+        <div class="col"></div>
+        <div class="col">
+          <small id="ingredientsHelpBlock" class="form-text text-muted">
+            Ingredient not found? Add a new ingredient using this button (opens in a new window)
+          </small>
+        </div>
+        <div class="col"><a href="https://www.gfood.gq/add-ingredient/" target="_blank" class = "btn btn-md btn-success" data-toggle="tooltip" data-placement="top" title="Open in a new window">New ingredient</a></div>
         
       </div>
       
       <div class="formgroup p-5">
-        <div class = "row row cols-4">
-          <div class="col"><h5>Count: <span id="ingreCounter">1</span>/15</h5></div>
-          <div class="col"></div>
-          <div class="col"> <input id="addRow" class="btn btn-primary btn-md btn-block" type="button" value="Add ingredient" onClick="addRow('dataTable')" /></div>
-          <div class="col">  <input id="deleteRow" type="button"  class="btn btn-danger btn-md btn-block" value="Remove ingredients" onClick="deleteRow('dataTable')" /></div>
-        </div>
-       
+        <h5>Count: <span id="ingreCounter">1</span>/15</h5>
            <!--Make sure the form has the autocomplete function switched off:-->
         <table class="table table-borderless table-hover" id="dataTable">
           <thead>
@@ -197,12 +195,8 @@
 
   <p>
     <div class="row row cols-4">
-      <div class="col">
-        <small id="ingredientsHelpBlock" class="form-text text-muted">
-          Ingredient not found? Add a new ingredient using this button (opens in a new window)
-        </small>
-      </div>
-      <div class="col"><a href="https://www.gfood.gq/add-ingredient/" target="_blank" class = "btn btn-md btn-success" data-toggle="tooltip" data-placement="top" title="Open in a new window">New ingredient</a></div>
+      <div class="col"> <input id="addRow" class="btn btn-primary btn-md btn-block" type="button" value="Add ingredient" onClick="addRow('dataTable')" /></div>
+      <div class="col">  <input id="deleteRow" type="button"  class="btn btn-danger btn-md btn-block" value="Remove ingredients" onClick="deleteRow('dataTable')" /></div>
       <div class="col"></div>
       <div class="col">   <input type="submit" id="calculate" class="btn btn-dark btn-md btn-block" value="Calculate information" /></div>
     </div>
