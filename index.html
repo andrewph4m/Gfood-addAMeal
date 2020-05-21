@@ -136,19 +136,22 @@
       </div >
       
       <div class = "row row cols-4">
-        <div class="col"><h2> Ingredients </h2><span>(Max 15)</div>
+        <div class="col"><h2> Ingredients </h2> <span>(Max 15)</div> 
         <div class="col"></div>
-        <div class="col">
-          <small id="ingredientsHelpBlock" class="form-text text-muted">
-            Ingredient not found? Add a new ingredient using this button (opens in a new window)
-          </small>
-        </div>
-        <div class="col"><a href="https://www.gfood.gq/add-ingredient/" target="_blank" class = "btn btn-md btn-success" data-toggle="tooltip" data-placement="top" title="Open in a new window">New ingredient</a></div>
+
+        <!-- <div class="col"> <input id="addRow" class="btn btn-primary btn-md btn-block" type="button" value="Add ingredient" onClick="addRow('dataTable')" /></div>
+      <div class="col">  <input id="deleteRow" type="button"  class="btn btn-danger btn-md btn-block" value="Remove ingredients" onClick="deleteRow('dataTable')" /></div> -->
         
       </div>
       
       <div class="formgroup p-5">
-        <h5>Count: <span id="ingreCounter">1</span>/15</h5>
+        <div class = "row row cols-4">
+          <div class="col"><h5>Count: <span id="ingreCounter">1</span>/15</h5></div>
+          <div class="col"></div>
+          <div class="col"> <input id="addRow" class="btn btn-primary btn-md btn-block" type="button" value="Add ingredient" onClick="addRow('dataTable')" /></div>
+          <div class="col">  <input id="deleteRow" type="button"  class="btn btn-danger btn-md btn-block" value="Remove ingredients" onClick="deleteRow('dataTable')" /></div>
+        </div>
+       
            <!--Make sure the form has the autocomplete function switched off:-->
         <table class="table table-borderless table-hover" id="dataTable">
           <thead>
@@ -194,8 +197,12 @@
 
   <p>
     <div class="row row cols-4">
-      <div class="col"> <input id="addRow" class="btn btn-primary btn-md btn-block" type="button" value="Add ingredient" onClick="addRow('dataTable')" /></div>
-      <div class="col">  <input id="deleteRow" type="button"  class="btn btn-danger btn-md btn-block" value="Remove ingredients" onClick="deleteRow('dataTable')" /></div>
+      <div class="col">
+        <small id="ingredientsHelpBlock" class="form-text text-muted">
+          Ingredient not found? Add a new ingredient using this button (opens in a new window)
+        </small>
+      </div>
+      <div class="col"><a href="https://www.gfood.gq/add-ingredient/" target="_blank" class = "btn btn-md btn-success" data-toggle="tooltip" data-placement="top" title="Open in a new window">New ingredient</a></div>
       <div class="col"></div>
       <div class="col">   <input type="submit" id="calculate" class="btn btn-dark btn-md btn-block" value="Calculate information" /></div>
     </div>
@@ -267,6 +274,9 @@
     var ingreMeasure = [];
     var energyOutput = [];
     var ghgOutput = [];
+    var hsrSum = 0;
+    var energySum = 0;
+    var ghgSum = 0;
     document.getElementById('calculate').disabled = true;
     (function() {
       'use strict';
@@ -398,6 +408,12 @@
   }
 
   function calculate(){
+    hsrSum = 0;
+    energySum = 0;
+    ghgSum = 0;
+    HSROutput = [];
+    energyOutput = [];
+    ghgOutput = [];
     document.getElementById('submitIngredient').hidden = false;
     document.getElementById('mealInfo').hidden = true;
     document.getElementById('hsrLabel').hidden = true;
@@ -555,16 +571,13 @@
 
     }
     setTimeout(function(){
-      var hsrSum = 0;
-      var energySum = 0;
-      var ghgSum = 0;
       // console.log(hsrSum);
       for( var i = 0; i < HSROutput.length; i++ ){
         hsrSum += (HSROutput[i]); //don't forget to add the base
         energySum += parseFloat(energyOutput[i]/ 100 * ingreMeasure[i]);
         ghgSum += parseFloat(ghgOutput[i]/ 100 * ingreMeasure[i]);
       }
-      var avg = Math.round(parseFloat(hsrSum/HSROutput.length),2);
+      var avg = (parseFloat(hsrSum/HSROutput.length)).toFixed(1);
       console.log(hsrSum);
       console.log(avg);
       document.getElementById('mealInfo').hidden = false;
