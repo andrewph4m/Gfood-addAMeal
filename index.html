@@ -420,7 +420,8 @@
       var quantity = document.getElementsByName('input-2[]')[i].value
       // ingredientInput.append(ingredientId, quantity)
       if (ingredientId != "" && typeof parseFloat(quantity) != "string" && parseFloat(quantity) <= 9999 && parseFloat(quantity) > 0){
-        obj["ingredients"].push({ingredientId, quantity});
+        var _id = ingredientId;
+        obj["ingredients"].push({_id, quantity});
       } else {
         obj["name"] = "";
         obj["description"] = "";
@@ -471,6 +472,7 @@
     energyOutput = [];
     ghgOutput = [];
     ingreMeasure = [];
+    jsonInput = [];
     document.getElementById('submitIngredient').hidden = false;
     document.getElementById('mealInfo').hidden = true;
     document.getElementById('hsrLabel').hidden = true;
@@ -495,7 +497,7 @@
 
     
     for(var i = -1; i < jsonLength - 1; i++){
-      var ingreId = jsonIn.ingredients[i+1].ingredientId;
+      var ingreId = jsonIn.ingredients[i+1]._id;
       console.log("this is the id: " + ingreId);
 
       
@@ -676,17 +678,21 @@
     myHeaders.append('GET', 'POST');
 
     ingredientInput = JSON.parse(ingredientInput);
-    ingredientInput["hsr"] = parseFloat(document.getElementById('meal_hsr').innerHTML)
-    ingredientInput["energy"] = parseFloat(document.getElementById('meal_energy').innerHTML)
-    ingredientInput["ghg"] = parseFloat(document.getElementById('meal_ghg').innerHTML)
-
-    var raw = JSON.stringify(ingredientInput);
     console.log(ingredientInput);
+    console.log(ingredientInput["ingredients"]);
+    ingredientInput["hsr"] = parseFloat(document.getElementById('meal_hsr').innerHTML);
+    ingredientInput["energy"] = parseFloat(document.getElementById('meal_energy').innerHTML);
+    ingredientInput["ghg"] = parseFloat(document.getElementById('meal_ghg').innerHTML);
+
+    ingredientInput = JSON.stringify(ingredientInput);
+    console.log(ingredientInput);
+ 
+
 
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
-      body: raw,
+      body: ingredientInput,
       redirect: 'follow'
     };
 
@@ -695,7 +701,7 @@
       .then(result => console.log(result))
       .catch(error => console.log('error', error));
 
-      window.top.location.href = "http://www.gfood.gq/thank-you/"; 
+      // window.top.location.href = "http://www.gfood.gq/thank-you/"; 
   }
 
   function ghgEmissions(catId){
