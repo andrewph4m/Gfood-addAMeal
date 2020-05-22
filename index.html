@@ -117,7 +117,10 @@
     <div class="loader"></div>
   </div>
   <div class="container">
-    <form class="needs-validation" novalidate>
+    <div id="mealNameCheck" class="alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>Holy guacamole!</strong> It seems that this meal has already existed in the database. Please choose a different meal name.
+    </div>
+    <form id="mealForm" class="needs-validation" novalidate>
       <h2 class="p-2"> Meal information </h2>
       <a href="#" class="badge badge-info" data-toggle="modal" data-target="#exampleModalCenter">Need help?</a>
 
@@ -310,6 +313,8 @@
 <script src="script2.js"></script>
 
 <script>
+    $('#mealNameCheck').hide();
+    $('.alert').alert()
     function ScrollToBottom(){
       $("html, body").animate({ 
                     scrollTop: $( 
@@ -661,16 +666,10 @@
     
   }
 
+  var valid = true;
   function SubmitMeal(){
-    $("div.spanner").addClass("show");
-    $("div.overlay").addClass("show");
-        
-        
-    setTimeout(function(){
-        $("div.spanner").removeClass("show");
-        $("div.overlay").removeClass("show");
     
-    }, 4000)
+    
 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -680,6 +679,8 @@
     ingredientInput = JSON.parse(ingredientInput);
     console.log(ingredientInput);
     console.log(ingredientInput["ingredients"]);
+    ingredientInput["name"] = document.getElementById('mealName').value;
+    ingredientInput["description"] = document.getElementById('mealDescription').value;
     ingredientInput["hsr"] = parseFloat(document.getElementById('meal_hsr').innerHTML);
     ingredientInput["energy"] = parseFloat(document.getElementById('meal_energy').innerHTML);
     ingredientInput["ghg"] = parseFloat(document.getElementById('meal_ghg').innerHTML);
@@ -697,11 +698,30 @@
     };
 
     fetch("https://gfood-api.azurewebsites.net/meals/add", requestOptions)
-      .then(response => response.text())
+      .then(response => {
+        if (response.ok) {
+          valid = true;
+          return response.text();
+          $('#mealNameCheck').hide();
+        } else {
+          // document.getElementById('mealNameCheck').hidden = false;
+          valid = false;
+          console.log(valid);
+          $('#mealNameCheck').show();
+          $("html, body").animate({ 
+                    scrollTop: 0
+                }, 2000); 
+          throw new Error('Something went wrong');
+        }
+      })
       .then(result => console.log(result))
       .catch(error => console.log('error', error));
 
-      window.top.location.href = "http://www.gfood.gq/thank-you/"; 
+      console.log(valid);
+      // if(valid){
+      //   window.top.location.href = "http://www.gfood.gq/thank-you/"; 
+      // }
+
   }
 
   function ghgEmissions(catId){
