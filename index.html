@@ -718,9 +718,10 @@
       .catch(error => console.log('error', error));
 
       console.log(valid);
-      // if(valid){
-      //   window.top.location.href = "http://www.gfood.gq/thank-you/"; 
-      // }
+      if(valid){
+        console.log('redirecting...');
+        window.top.location.href = "http://www.gfood.gq/thank-you/"; 
+      }
 
   }
 
