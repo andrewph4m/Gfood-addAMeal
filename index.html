@@ -426,7 +426,8 @@
       // ingredientInput.append(ingredientId, quantity)
       if (ingredientId != "" && typeof parseFloat(quantity) != "string" && parseFloat(quantity) <= 9999 && parseFloat(quantity) > 0){
         var _id = ingredientId;
-        obj["ingredients"].push({_id, quantity});
+        var ingredient = ingredientId;
+        obj["ingredients"].push({_id,ingredient,quantity});
       } else {
         obj["name"] = "";
         obj["description"] = "";
