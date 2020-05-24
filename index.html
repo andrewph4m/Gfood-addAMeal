@@ -174,7 +174,7 @@
 
       <div class="formgroup p-5" >
         <label for="mealName"><strong>Meal name </strong> <span style="color:red"><strong>*</strong></span></span> <i class="fas fa-info-circle" id="nameHelp" data-toggle="tooltip" data-placement="right" title="Your desired meal name"></i></label>
-        <input name="input-mealName" class="form-control form-control-md" type="text" id="mealName" placeholder="Name of your meal" required>
+        <input name="input-mealName" class="form-control form-control-md" type="text" id="mealName" placeholder="Name of your meal" onInput="disableSubmit()" required>
         <div class="invalid-feedback">
           Please enter a meal name!
         </div>
@@ -185,7 +185,7 @@
       
       <div class="formgroup p-5">
         <label for="mealDescription"> <strong>Meal description <i class="fas fa-info-circle" id="descHelp" data-toggle="tooltip" data-placement="right" title="" aria-hidden="true" data-original-title="Your meal description (optional)"></i><span class="sr-only">Your meal description (optional)</span></strong> </label>
-        <textarea name="input-mealDesc" class="form-control form-control-md" type="textarea" id="mealDescription" placeholder="Description here" rows="3"></textarea>
+        <textarea name="input-mealDesc" class="form-control form-control-md" type="textarea" id="mealDescription" placeholder="Description here" rows="3" onInput="disableSubmit()"></textarea>
       </div>
 
 
@@ -213,10 +213,10 @@
           <tbody>
 
             <tr>
-              <td><input type="checkbox" class="check">
+              <td><input type="checkbox" class="check" onchange="disableSubmit()">
               </td>
               <td>
-                <select name="input-1[]" class="chosen_select_L" id="ingredient" required>
+                <select name="input-1[]" class="chosen_select_L" id="ingredient" onchange="disableSubmit()" required>
                   <option></option>
                 </select>
                 <div class="invalid-tooltip">
@@ -248,10 +248,10 @@
 
   <p>
     <div class="row row cols-4">
-      <div class="col"> <input id="addRow" class="btn btn-primary btn-md btn-block" type="button" value="Add ingredient" onClick="addRow('dataTable')" /></div>
-      <div class="col">  <input id="deleteRow" type="button"  class="btn btn-danger btn-md btn-block" value="Remove ingredients" onClick="deleteRow('dataTable')" /></div>
+      <div class="col"> <input id="addRow" class="btn btn-primary btn-md btn-block" type="button" value="Add ingredient" onClick="addRow('dataTable'); disabbleSubmit()" /></div>
+      <div class="col">  <input id="deleteRow" type="button"  class="btn btn-danger btn-md btn-block" value="Remove ingredients" onClick="deleteRow('dataTable'); disabbleSubmit()" /></div>
       <div class="col"></div>
-      <div class="col">   <input type="submit" id="calculate" class="btn btn-dark btn-md btn-block" value="Calculate information" /></div>
+      <div class="col">   <input type="submit" id="calculate" class="btn btn-dark btn-md btn-block" value="Calculate information" onClick='enableSubmit()'/></div>
     </div>
   </p>
 
@@ -537,93 +537,113 @@
       };
       
 
-      fetch(url, requestOptions)
-        .then(response => response.text())
-        .then(data => localCopy = data)
-        .then(() =>  jsonInput.push(localCopy))
-        .catch(error => console.log('error', error));
+      // fetch(url, requestOptions)
+      //   .then(response => response.text())
+      //   .then(data => localCopy = data)
+      //   .then(() =>  jsonInput.push(localCopy))
+      //   .catch(error => console.log('error', error));
       
-      // console.log("OK" + localCopy)
-      // jsonInput.push(localCopy);
-      console.log(i);
-      setTimeout(function(){
-          console.log(jsonInput);
-          var inputProccess;
-          console.log('index: ' + i);
-          console.log(jsonInput[i]);
-          inputProccess = jsonInput[i];
-          inputProccess = JSON.parse(inputProccess);
-          console.log('INPUT PROCESS:'+inputProccess);
 
-          if(!inputProccess.hsr_id){
-            cat_ID = (Math.floor(Math.random() * 3) + 1).toString();
-            if(Math.round(Math.random()) == 1){
-              cat_ID = cat_ID + "D";
-            }
-          } else {
-            cat_ID = parseFloat(inputProccess.hsr_id);
-          }
-          if(!inputProccess.emission_id){
-            class_ID = Math.floor(Math.random() * 44) + 1; 
-          } else {
-            class_ID = parseFloat(inputProccess.emission_id);
-          }
-          ghgOutput.push(parseFloat(ghgEmissions(parseInt(class_ID))));
-
-          protein = parseFloat(inputProccess.protein);
-
-
-          energy = parseFloat(inputProccess.energy);
+        const request = async () => {
+          const response = await fetch(url, requestOptions);
+          const result = await response.text();
+          var jsonFile = JSON.parse(result);
+          energy = parseFloat(jsonFile.energy);
           energyOutput.push(energy);
-          console.log(energy);
+          // console.log(energy);
+          HSROutput.push(parseFloat(jsonFile.hsr));
+
+          if (jsonFile.ghg == null){
+            ghgOutput.push(ghgEmissions(Math.random * 43) + 1);
+          } else {
+            ghgOutput.push(parseFloat(jsonFile.ghg));
+          } 
           
 
-          tsfa = parseFloat(inputProccess.saturated_fat);
-          sugars = parseFloat(inputProccess.sugar);
-          sodium = parseFloat(inputProccess.sodium);
-          fibre = parseFloat(inputProccess.fibre);
+          console.log(result);
+          // return result;
+        }
+      //   var hello = request();
+      request();
+      
+      // // console.log("OK" + localCopy)
+      // // jsonInput.push(localCopy);
+      // console.log(i);
+      
+      //     console.log(jsonInput);
+      //     var inputProccess;
+      //     console.log('index: ' + i);
+      //     console.log(jsonInput[i]);
+      //     inputProccess = jsonInput[i];
+      //     inputProccess = JSON.parse(inputProccess);
+      //     console.log('INPUT PROCESS:'+inputProccess);
+      //     energy = parseFloat(inputProccess.energy);
+      //     energyOutput.push(energy);
+      //     // console.log(energy);
+      //     hsrOutput.push(parseFloat(inputProccess.hsr));
+      //     ghgOutput.push(parseFloat(inputProccess.ghg));
 
-          var n = 5;
-          var myHeaders2 = new Headers();
+          // if(!inputProccess.hsr_id){
+          //   cat_ID = (Math.floor(Math.random() * 3) + 1).toString();
+          //   if(Math.round(Math.random()) == 1){
+          //     cat_ID = cat_ID + "D";
+          //   }
+          // } else {
+          //   cat_ID = parseFloat(inputProccess.hsr_id);
+          // }
+          // if(!inputProccess.emission_id){
+          //   class_ID = Math.floor(Math.random() * 44) + 1; 
+          // } else {
+          //   class_ID = parseFloat(inputProccess.emission_id);
+          // }
+          // ghgOutput.push(parseFloat(ghgEmissions(parseInt(class_ID))));
+          // protein = parseFloat(inputProccess.protein);
 
-          var whyTheHell;
 
-          myHeaders2.append("Content-Type", "application/json");
-          myHeaders2.append('Accept', 'application/json');
-          myHeaders2.append('GET', 'POST');
+          // tsfa = parseFloat(inputProccess.saturated_fat);
+          // sugars = parseFloat(inputProccess.sugar);
+          // sodium = parseFloat(inputProccess.sodium);
+          // fibre = parseFloat(inputProccess.fibre);
+          // var myHeaders2 = new Headers();
 
-          raw = JSON.stringify({"category_id":cat_ID,"energy":energy,"tsfa":tsfa,"sugars":sugars,"sodium":sodium,"protein":protein,"fibre":fibre});
-          console.log(raw);
+          // var whyTheHell;
 
-          var requestOptions = {
-            method: 'POST',
-            headers: myHeaders2,
-            body: raw,
-            redirect: 'follow'
-          };
-          console.log(requestOptions);
-          //document.getElementById('myText').innerHTML = '<img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" height=20% width=20% />';
-          // const fetch_retry = async (n) => {
-            setTimeout(function(){
-              console.log('Starting HSR API');
-            //try {
-              var localHSR;
-              fetch("https://gfood-hsr-api.azurewebsites.net", requestOptions)
-              .then(response => response.text())
-              .then(data =>  localHSR = data)
-              .then(() => HSROutput.push(parseFloat(localHSR.substring(7, 10))))
-              .catch(error => console.log('error', error));
+          // myHeaders2.append("Content-Type", "application/json");
+          // myHeaders2.append('Accept', 'application/json');
+          // myHeaders2.append('GET', 'POST');
 
-              // fetch("https://gfood-hsr-api.azurewebsites.net", requestOptions)
-              // .then(response => response.text())
-              // .then(data =>  localHSR = data)
-              // .then(() => )
-              // .catch(error => console.log('error', error));
-              console.log("fetch ok");
-              //console.log(typeof whyTheHell);
+          // raw = JSON.stringify({"category_id":cat_ID,"energy":energy,"tsfa":tsfa,"sugars":sugars,"sodium":sodium,"protein":protein,"fibre":fibre});
+          // console.log(raw);
 
-              //HSROutput.push(parseFloat(whyTheHell.substring(7, 10))); 
-            },500)
+          // var requestOptions = {
+          //   method: 'POST',
+          //   headers: myHeaders2,
+          //   body: raw,
+          //   redirect: 'follow'
+          // };
+          // console.log(requestOptions);
+          // //document.getElementById('myText').innerHTML = '<img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" height=20% width=20% />';
+          // // const fetch_retry = async (n) => {
+          //   setTimeout(function(){
+          //     console.log('Starting HSR API');
+          //   //try {
+          //     var localHSR;
+          //     fetch("https://gfood-hsr-api.azurewebsites.net", requestOptions)
+          //     .then(response => response.text())
+          //     .then(data =>  localHSR = data)
+          //     .then(() => HSROutput.push(parseFloat(localHSR.substring(7, 10))))
+          //     .catch(error => console.log('error', error));
+
+          //     // fetch("https://gfood-hsr-api.azurewebsites.net", requestOptions)
+          //     // .then(response => response.text())
+          //     // .then(data =>  localHSR = data)
+          //     // .then(() => )
+          //     // .catch(error => console.log('error', error));
+          //     console.log("fetch ok");
+          //     //console.log(typeof whyTheHell);
+
+          //     //HSROutput.push(parseFloat(whyTheHell.substring(7, 10))); 
+          //   },500)
            
               
 
@@ -632,7 +652,7 @@
           //    return await fetch_retry(n - 1);
           //  }
           // };
-      }, 2000)
+      
       
 
     }
@@ -654,9 +674,9 @@
       document.getElementById('energyLabel').hidden = false;
       document.getElementById('ghgLabel').hidden = false;
       document.getElementById('meal_hsr').innerHTML = avg;
-      document.getElementById('stars').innerHTML = getStars(avg);
-      document.getElementById('meal_energy').innerHTML = Math.round(energySum,2);
-      document.getElementById('meal_ghg').innerHTML = Math.round(ghgSum,2);
+      document.getElementById('stars').innerHTML = getStars(Math.round(avg * 2) / 2);
+      document.getElementById('meal_energy').innerHTML = Math.round(energySum * 100) /100;
+      document.getElementById('meal_ghg').innerHTML = Math.round(ghgSum * 100 ) / 100;
       
       
       $("html, body").animate({ 
@@ -724,6 +744,13 @@
         window.top.location.href = "http://www.gfood.gq/thank-you/"; 
       }
 
+  }
+  function disableSubmit(){
+    document.getElementById('submitIngredient').disabled = true;
+  }
+
+  function enableSubmit(){
+    document.getElementById('submitIngredient').disabled = true;
   }
 
   function ghgEmissions(catId){
