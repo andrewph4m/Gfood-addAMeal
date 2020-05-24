@@ -460,7 +460,7 @@
     output.push('<i class="fa fa-star" aria-hidden="true" style="color: gold;"></i>&nbsp;');
 
     // If there is a half a star, append it
-    if (i == .5) output.push('<i class="fa fa-star-half-o" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+    if (i == .5) output.push('<i class="fa fa-star-half-alt" aria-hidden="true" style="color: gold;"></i>&nbsp;');
 
     // Fill the empty stars
     for (let i = (5 - rating); i >= 1; i--)
@@ -549,9 +549,18 @@
           const result = await response.text();
           var jsonFile = JSON.parse(result);
           energy = parseFloat(jsonFile.energy);
-          energyOutput.push(energy);
+          if (energy == null){
+            energyOutput.push((Math.random * 100) + 1);
+          } else {
+            energyOutput.push(energy);
+          }
           // console.log(energy);
-          HSROutput.push(parseFloat(jsonFile.hsr));
+          if(jsonFile.hsr == null){
+            HSROutput.push((Math.random * 5) + 1);
+          } else {
+            HSROutput.push(parseFloat(jsonFile.hsr));
+          }
+          
 
           if (jsonFile.ghg == null){
             ghgOutput.push(ghgEmissions(Math.random * 43) + 1);
